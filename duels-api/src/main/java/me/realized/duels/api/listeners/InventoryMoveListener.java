@@ -8,7 +8,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -51,15 +50,6 @@ public final class InventoryMoveListener implements Listener {
 
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerDropItem(PlayerDropItemEvent e) {
-		var player = e.getPlayer();
-
-		if (!isBypass(player) && blockedMove.contains(player.getName())) {
-			e.setCancelled(true);
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onPlayerSwapHandItems(PlayerSwapHandItemsEvent e) {
 		var player = e.getPlayer();
 
 		if (!isBypass(player) && blockedMove.contains(player.getName())) {
