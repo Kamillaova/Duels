@@ -93,8 +93,6 @@ ERROR:
     invalid-action: '{PREFIX} &c''%action%'' is not a valid action. Available actions are: %available_actions%'
     not-enough-money: '{PREFIX} &cYou do not have enough money to bet!'
     lobby-save-failure: '{PREFIX} &cCould not save lobby location. Please check the console for more information.'
-    name-not-alphanumeric: '{PREFIX} &c''%name%'' is not alphanumeric.'
-
 
 COMMAND:
   duel:
@@ -318,7 +316,10 @@ DUEL:
       title: '&eYOU WON &6$%money%&e!'
     items:
       message: '{PREFIX} &7You have received &f%name%&7''s items for winning!'
-
+    actionbar:
+      match-time-left: 'Match ends after %time%'
+      time-format-seconds: '%s% seconds'
+      time-format-mins: '%m% minutes and %s% seconds'
 
 QUEUE:
   prevent:

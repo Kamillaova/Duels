@@ -55,7 +55,6 @@ public class ArenaManagerImpl implements Loadable, ArenaManager {
 
     private static final String FILE_NAME = "arenas.json";
 
-    private static final String ERROR_NOT_ALPHANUMERIC = "Could not load arena %s: Name is not alphanumeric.";
     private static final String ARENAS_LOADED = "Loaded %s arena(s).";
 
     private final DuelsPlugin plugin;
@@ -92,11 +91,6 @@ public class ArenaManagerImpl implements Loadable, ArenaManager {
 
                 if (data != null) {
                     for (final ArenaData arenaData : data) {
-                        if (!StringUtil.isAlphanumeric(arenaData.getName())) {
-                            Log.warn(this, String.format(ERROR_NOT_ALPHANUMERIC, arenaData.getName()));
-                            continue;
-                        }
-
                         arenas.add(arenaData.toArena(plugin));
                     }
                 }

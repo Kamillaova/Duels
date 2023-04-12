@@ -12,6 +12,7 @@ import me.realized.duels.util.Log;
 import me.realized.duels.util.Reloadable;
 import me.realized.duels.util.StringUtil;
 import me.realized.duels.util.config.AbstractConfiguration;
+import net.kyori.adventure.text.Component;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.MemorySection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -139,5 +140,15 @@ public class Lang extends AbstractConfiguration<DuelsPlugin> implements Reloadab
 
     public void sendMessage(final Collection<Player> players, final String key, final Object... replacers) {
         players.forEach(player -> sendMessage(player, key, replacers));
+    }
+
+    public void sendRawActionbar(Player receiver, String message) {
+        receiver.sendActionBar(Component.text(message));
+    }
+
+    public void sendRawActionbar(Collection<Player> receivers, String message) {
+        for (var receiver : receivers) {
+            sendRawActionbar(receiver, message);
+        }
     }
 }

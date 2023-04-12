@@ -1,6 +1,7 @@
 package me.realized.duels.api.event.match;
 
 import java.util.Objects;
+import me.realized.duels.api.listeners.InventoryMoveListener;
 import me.realized.duels.api.match.Match;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -19,6 +20,9 @@ public class MatchStartEvent extends MatchEvent {
         super(match);
         Objects.requireNonNull(players, "players");
         this.players = players;
+        for (Player player : players) {
+            InventoryMoveListener.blockedMove.add(player.getName());
+        }
     }
 
     /**

@@ -45,7 +45,6 @@ public class KitManagerImpl implements Loadable, KitManager {
 
     private static final String FILE_NAME = "kits.json";
 
-    private static final String ERROR_NOT_ALPHANUMERIC = "Could not load kit %s: Name is not alphanumeric.";
     private static final String KITS_LOADED = "Loaded %s kit(s).";
 
     private final DuelsPlugin plugin;
@@ -80,11 +79,6 @@ public class KitManagerImpl implements Loadable, KitManager {
 
                 if (data != null) {
                     for (final Map.Entry<String, KitData> entry : data.entrySet()) {
-                        if (!StringUtil.isAlphanumeric(entry.getKey())) {
-                            Log.warn(this, String.format(ERROR_NOT_ALPHANUMERIC, entry.getKey()));
-                            continue;
-                        }
-
                         kits.put(entry.getKey(), entry.getValue().toKit(plugin));
                     }
                 }
@@ -129,10 +123,6 @@ public class KitManagerImpl implements Loadable, KitManager {
     public KitImpl create(@NotNull final Player creator, @NotNull final String name, final boolean override) {
         Objects.requireNonNull(creator, "creator");
         Objects.requireNonNull(name, "name");
-
-        if (!StringUtil.isAlphanumeric(name) || (!override && kits.containsKey(name))) {
-            return null;
-        }
 
         final KitImpl kit = new KitImpl(plugin, name, creator.getInventory());
         kits.put(name, kit);

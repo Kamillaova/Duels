@@ -44,7 +44,7 @@ public class KitImpl extends BaseButton implements Kit {
         super(plugin, displayed != null ? displayed : ItemBuilder
             .of(Material.DIAMOND_SWORD)
             .name("&7&l" + name)
-            .lore("&aClick to send", "&aa duel request", "&awith this kit!")
+            .lore("&aНажмите, чтобы", "&aотправить вызов", "&aс этим набором!")
             .build());
         this.name = name;
         this.usePermission = usePermission;

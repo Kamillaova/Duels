@@ -18,11 +18,6 @@ public class SavekitCommand extends BaseCommand {
         final String[] argsNoOptions = Arrays.stream(args).filter(s -> !s.startsWith("-")).toArray(String[]::new);
         final String name = StringUtil.join(argsNoOptions, " ", 1, argsNoOptions.length);
 
-        if (!StringUtil.isAlphanumeric(name)) {
-            lang.sendMessage(sender, "ERROR.command.name-not-alphanumeric", "name", name);
-            return;
-        }
-
         if (kitManager.create((Player) sender, name, Arrays.asList(args).contains("-o")) == null) {
             lang.sendMessage(sender, "ERROR.kit.already-exists", "name", name);
             return;

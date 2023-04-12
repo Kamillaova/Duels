@@ -10,9 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
+
 import me.realized.duels.DuelsPlugin;
 import me.realized.duels.api.event.match.MatchEndEvent.Reason;
 import me.realized.duels.api.event.match.MatchStartEvent;
+import me.realized.duels.api.listeners.InventoryMoveListener;
 import me.realized.duels.arena.ArenaImpl;
 import me.realized.duels.arena.ArenaManagerImpl;
 import me.realized.duels.arena.MatchImpl;
@@ -61,6 +64,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 import org.bukkit.event.inventory.InventoryType;
@@ -130,7 +134,31 @@ public class DuelManager implements Loadable {
                     final MatchImpl match = arena.getMatch();
 
                     // Only handle undecided matches (size > 1)
-                    if (match == null || match.getDurationInMillis() < (config.getMaxDuration() * 60 * 1000L) || arena.size() <= 1) {
+                    if (match == null) continue;
+
+                    long maxDuration = config.getMaxDuration() * 60 * 1000L;
+
+                    long timeSeconds = TimeUnit.MILLISECONDS.toSeconds(maxDuration - match.getDurationInMillis());
+                    long timeMins = TimeUnit.SECONDS.toMinutes(timeSeconds);
+
+                    String message = "";
+
+                    if (timeMins == 0) {
+                        if (timeSeconds != 0)
+                            message = lang.getMessage("DUEL.actionbar.time-format-seconds", "s", timeSeconds);
+                        } else {
+                            message = lang.getMessage("DUEL.actionbar.time-format-mins",
+                              "m", timeMins, "s", timeSeconds - (60 * timeMins)
+                            );
+                        }
+
+                        String actionbar = lang.getMessage("DUEL.actionbar.match-time-left", "time", message);
+
+                        if (match.isFinished() || timeSeconds == 0) actionbar = "";
+
+                        lang.sendRawActionbar(match.getPlayers(), actionbar);
+
+                        if (match.getDurationInMillis() < maxDuration || arena.size() <= 1) {
                         continue;
                     }
 
@@ -642,17 +670,19 @@ public class DuelManager implements Loadable {
         }
 
         @EventHandler(ignoreCancelled = true)
-        public void on(final PlayerPickupItemEvent event) {
-            // Fix players not being able to use the Loyalty enchantment in a duel if item pickup is disabled in config.
-            if (!CompatUtil.isPre1_13() && event.getItem().getItemStack().getType() == Material.TRIDENT) {
-                return;
-            }
+        public void on(final EntityPickupItemEvent event) {
+            if (event.getEntity() instanceof Player player) {
+                // Fix players not being able to use the Loyalty enchantment in a duel if item pickup is disabled in config.
+                if (!CompatUtil.isPre1_13() && event.getItem().getItemStack().getType() == Material.TRIDENT) {
+                    return;
+                }
 
-            if (!config.isPreventItemPickup() || !arenaManager.isInMatch(event.getPlayer())) {
-                return;
-            }
+                if (!config.isPreventItemPickup() || !arenaManager.isInMatch(player) || InventoryMoveListener.isBypass(player)) {
+                    return;
+                }
 
-            event.setCancelled(true);
+                event.setCancelled(true);
+            }
         }
 
         @EventHandler(ignoreCancelled = true)

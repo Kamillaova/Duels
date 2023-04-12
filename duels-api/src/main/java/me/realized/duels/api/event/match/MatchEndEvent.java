@@ -2,7 +2,11 @@ package me.realized.duels.api.event.match;
 
 import java.util.Objects;
 import java.util.UUID;
+
+import me.realized.duels.api.listeners.InventoryMoveListener;
 import me.realized.duels.api.match.Match;
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -25,6 +29,24 @@ public class MatchEndEvent extends MatchEvent {
         this.winner = winner;
         this.loser = loser;
         this.reason = reason;
+
+        if (winner != null) {
+            Player player = Bukkit.getPlayer(winner);
+            if (player != null) {
+                InventoryMoveListener.blockedMove.remove(player.getName());
+            }
+        }
+
+        if (loser != null) {
+            Player player = Bukkit.getPlayer(loser);
+            if (player != null) {
+                InventoryMoveListener.blockedMove.remove(player.getName());
+            }
+        }
+
+        for (Player player : match.getStartingPlayers()) {
+            InventoryMoveListener.blockedMove.remove(player.getName());
+        }
     }
 
     /**

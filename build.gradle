@@ -1,12 +1,5 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        gradlePluginPortal()
-    }
-
-    dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
-    }
+plugins {
+    id "com.github.johnrengelman.shadow" version "8.1.1" apply false
 }
 
 allprojects {
@@ -20,8 +13,8 @@ subprojects {
     apply plugin: 'com.github.johnrengelman.shadow'
     apply plugin: 'maven-publish'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    sourceCompatibility = 17
+    targetCompatibility = 17
 
     repositories {
         mavenCentral()
@@ -60,9 +53,9 @@ subprojects {
             name 'essentialsx-repo'
             url 'https://repo.essentialsx.net/releases/'
         }
-
-        flatDir {
-            dirs "$rootDir/libs/"
+        maven {
+            name 'papermc-repo'
+            url 'https://papermc.io/repo/repository/maven-public/'
         }
     }
 }

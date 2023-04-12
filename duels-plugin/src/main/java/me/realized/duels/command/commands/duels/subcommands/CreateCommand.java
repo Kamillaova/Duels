@@ -15,11 +15,6 @@ public class CreateCommand extends BaseCommand {
     protected void execute(final CommandSender sender, final String label, final String[] args) {
         final String name = StringUtil.join(args, " ", 1, args.length);
 
-        if (!StringUtil.isAlphanumeric(name)) {
-            lang.sendMessage(sender, "ERROR.command.name-not-alphanumeric", "name", name);
-            return;
-        }
-
         if (!arenaManager.create(sender, name)) {
             lang.sendMessage(sender, "ERROR.arena.already-exists", "name", name);
             return;

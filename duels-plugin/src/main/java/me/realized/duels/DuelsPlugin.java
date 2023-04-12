@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import me.realized.duels.api.Duels;
 import me.realized.duels.api.command.SubCommand;
+import me.realized.duels.api.listeners.InventoryMoveListener;
 import me.realized.duels.arena.ArenaManagerImpl;
 import me.realized.duels.betting.BettingManager;
 import me.realized.duels.command.commands.SpectateCommand;
@@ -185,6 +186,8 @@ public class DuelsPlugin extends JavaPlugin implements Duels, LogSource {
         new EnderpearlListener(this);
         new KitOptionsListener(this);
         new LingerPotionListener(this);
+
+        getServer().getPluginManager().registerEvents(new InventoryMoveListener(), this);
 
         new Metrics(this, BSTATS_ID);
 
